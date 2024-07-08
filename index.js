@@ -16,13 +16,12 @@ async function connect(){
 connect()
 
 // MIDDLEWARE
+app.use(express.static("public"))
 app.use(express.json());
 
 // allow CORS for local development (for production, you should configure it properly)
 app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
+  cors()
 );
 
 // ROUTES
