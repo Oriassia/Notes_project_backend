@@ -33,6 +33,12 @@ app.use("/api/tasks",verifyToken, TasksRoutes);
 app.use("/api/users",verifyToken, useresRoutes);
 app.use("/api/auth", authRoutes);
 
+// Catch-all route
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+
 // START SERVER
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

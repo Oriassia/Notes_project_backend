@@ -12,9 +12,7 @@ function verifyToken(req, res, next) {
   if (!token) return res.status(401).json({ error: "Access denied" });
 
   try {
-    console.log("verifying...");
     const decoded = jwt.verify(token, JWT_SECRET); // Verify token
-    console.log("token verifyed");
     req.userId = decoded.userId; // Add userId to request object
     next(); // Call next middleware
   } catch (error) {

@@ -12,7 +12,6 @@ async function getTasks(req, res) {
 
 async function getTaskById(req, res) {
   const { id } = req.params;
-
   try {
     const task = await Task.findById(id).exec();
     if (!task) {
@@ -30,23 +29,22 @@ async function getTaskById(req, res) {
 async function deleteTask(req, res) {
   const { id } = req.params;
   const {userId} = req;
-  console.log(id);
 
   try {
-    const deletedTask = await Task.findOneAndDelete({ _id: id, user: userId });
+    const deletedTask = await Task.findByIdAndDelete(id);
 
     if (!deletedTask) {
       return res.status(404).json({ message: "Task not found" });
     }
 
     await User.findByIdAndUpdate(userId, {
-      $pull: { tasks: deletedTask._id }
+      $pull: { tasks: id }
     });
 
     res.status(200).json({ message: "Task deleted successfully" });
   } catch (error) {
     if (error.name === "CastError") {
-      return res.status(404).json({ message: "Task not found" });
+      return res.status(404).json({ message: "Task in user not found" });
     }
     res.status(500).json({ message: error.message });
   }
@@ -69,7 +67,6 @@ async function createTask(req, res) {
 
     res.status(201).json({ message: "Task added successfully", task: tempTask });
   } catch (error) {
-    console.error(error.message);
     res.status(500).json({ message: error.message });
   }
 }

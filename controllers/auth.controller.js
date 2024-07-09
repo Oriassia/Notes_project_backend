@@ -12,7 +12,6 @@ async function register(req, res) {
 
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS); // Hash password
-    console.log(hashedPassword);
 
     const user = new User({ username, password: hashedPassword,email,firstName,lastName}); 
     
@@ -21,9 +20,7 @@ async function register(req, res) {
 
     res.status(200).json({ message: "User registered successfully" });
   } catch (error) {
-    console.log("register", error.name);
     if (error.code === 11000) {
-      console.log("username already exists");
       return res.status(400).json({ error: "User already exists" });
     }
     res.status(500).json( error.message);
@@ -33,7 +30,6 @@ async function register(req, res) {
 async function login(req, res) {
   try {
     const { username, password } = req.body;
-    console.log(username);
 
     const user = await User.findOne({ username });
     if (!user) {
