@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 
 async function getTasks(req, res) {
   try {
-    const tasks = await Task.find().exec();
+    const tasks = await Task.find({user:req.userId}).exec();
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
